@@ -1,47 +1,26 @@
 package br.com.marcoscsouza.viaCepApp.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import br.com.marcoscsouza.viaCepApp.entities.Endereco;
+import br.com.marcoscsouza.viaCepApp.entities.ViaCepAddress;
+import br.com.marcoscsouza.viaCepApp.service.EnderecoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 @RestController
+@RequestMapping("/api/cep")
 public class CepController {
 
+    @Autowired
+    private EnderecoService enderecoService;
 
-    @GetMapping(value = "/cep")
-    public String cep() {
-        String output = "";
-        try {
-            String url = "https://viacep.com.br/ws/26155070/json";
-
-            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-
-            if (conn.getResponseCode() != 200) {
-                System.out.println("Erro " + conn.getResponseCode() + " ao obter dados da URL " + url);
-            }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                output += line;
-            }
-
-            conn.disconnect();
-
-        }catch (IOException e){
-            System.out.println("error! " + e.getMessage());
-        }
-        return output;
+    @PostMapping("/busca")
+    public String buscaCep(@RequestParam String cep){
+        return enderecoService.buscaCep(cep);
     }
 
 

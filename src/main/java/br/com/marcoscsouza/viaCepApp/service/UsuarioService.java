@@ -1,7 +1,8 @@
 package br.com.marcoscsouza.viaCepApp.service;
 
 import br.com.marcoscsouza.viaCepApp.entities.Usuario;
-import br.com.marcoscsouza.viaCepApp.entities.ViaCepResponse;
+import br.com.marcoscsouza.viaCepApp.entities.Endereco;
+import br.com.marcoscsouza.viaCepApp.entities.ViaCepAddress;
 import br.com.marcoscsouza.viaCepApp.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,16 +16,18 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public List<Usuario> findUsers(){
-        return usuarioRepository.findAll();
-    }
 
     public void validarCep(Usuario usuario){
+
+    }
+
+    public Usuario createUser(Usuario usuario, String cep) {
+
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "https://viacep.com.br/ws/"+usuario.getCep()+"/json";
+        String url = "https://viacep.com.br/ws/"+cep+"/json";
 
-        ViaCepResponse response = restTemplate.getForObject(url, ViaCepResponse.class);
+        ViaCepAddress response = restTemplate.getForObject(url, ViaCepAddress.class);
 
         if (response.getCep() == null){
             throw new IllegalArgumentException("Invalid Cep!");
@@ -34,33 +37,30 @@ public class UsuarioService {
                         ", " + response.getBairro() +
                         ", " + response.getLocalidade() +
                         ", " + response.getUf());
-    }
-
-    public Usuario criarUsuario(Usuario usuario) {
-
-        validarCep(usuario);
 
         return usuarioRepository.save(usuario);
     }
+    public List<Usuario> findUsers(){
+        return usuarioRepository.findAll();
+    }
 
-    public Usuario findUserById(Long id) {
+    public Usuario findUserById(Integer id) {
         return usuarioRepository.findById(id).get();
     }
 
-    public void deleteUserById(Long id) {
+    public void deleteUserById(Integer id) {
         usuarioRepository.deleteById(id);
     }
 
-    public void updateUserById(Long id, Usuario usuario) {
-        Usuario usuario1 = usuarioRepository.findById(id).orElseThrow(
+    public void updateUserById(Integer id, Usuario usuario) {
+        Usuario usuarioAtual = usuarioRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Invalid user Id:" + id));
 
-        usuario1.setNome(usuario.getNome());
-        usuario1.setCep(usuario.getCep());
-        usuario1.setEmail(usuario.getEmail());
-        usuario1.setTelefone(usuario.getTelefone());
+        usuarioAtual.setNome(usuario.getNome());
+        usuarioAtual.setEmail(usuario.getEmail());
+        usuarioAtual.setTelefone(usuario.getTelefone());
+        usuarioAtual.setFoto(usuario.getFoto());
 
-        validarCep(usuario1);
-        usuarioRepository.save(usuario1);
+        usuarioRepository.save(usuarioAtual);
     }
 }

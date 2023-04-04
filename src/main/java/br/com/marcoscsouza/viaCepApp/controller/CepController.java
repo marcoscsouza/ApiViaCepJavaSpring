@@ -1,14 +1,13 @@
 package br.com.marcoscsouza.viaCepApp.controller;
 
-import br.com.marcoscsouza.viaCepApp.entities.Endereco;
-import br.com.marcoscsouza.viaCepApp.entities.ViaCepAddress;
 import br.com.marcoscsouza.viaCepApp.service.EnderecoService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 
 @RestController
@@ -19,7 +18,11 @@ public class CepController {
     private EnderecoService enderecoService;
 
     @PostMapping("/busca")
-    public String buscaCep(@RequestParam String cep){
+    public String buscaCep(@RequestParam @Parameter(description = "CEP a ser buscado",
+                example = "26155070",
+                required = true,
+                in = ParameterIn.QUERY
+                ) String cep ){
         return enderecoService.buscaCep(cep);
     }
 

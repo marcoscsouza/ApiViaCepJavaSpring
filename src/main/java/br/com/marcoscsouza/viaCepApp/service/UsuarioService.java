@@ -1,7 +1,6 @@
 package br.com.marcoscsouza.viaCepApp.service;
 
 import br.com.marcoscsouza.viaCepApp.entities.Usuario;
-import br.com.marcoscsouza.viaCepApp.entities.Endereco;
 import br.com.marcoscsouza.viaCepApp.entities.ViaCepAddress;
 import br.com.marcoscsouza.viaCepApp.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;

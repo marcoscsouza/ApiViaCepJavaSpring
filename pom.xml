@@ -23,6 +23,7 @@
 			<artifactId>tomcat-embed-jasper</artifactId>
 		</dependency>
 
+
 		<!-- Dependência do aws s3 -->
 		<dependency>
 			<groupId>com.amazonaws</groupId>
@@ -118,6 +119,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>openapi-generator</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
